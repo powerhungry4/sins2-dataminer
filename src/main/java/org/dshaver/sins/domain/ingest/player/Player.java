@@ -1,11 +1,13 @@
 package org.dshaver.sins.domain.ingest.player;
 
-import lombok.Data;
-
 import java.util.List;
 
+import org.dshaver.sins.service.FileTools;
+
+import lombok.Data;
+
 @Data
-public class Player {
+public class Player implements FileTools.EntityClass{
     String id;
     String race;
     List<String> buildableUnits;
@@ -15,4 +17,9 @@ public class Player {
     List<String> shipComponents;
     List<String> planetComponents;
     List<String> factionPlanetComponents;
+
+    @Override
+    public void extraActions(String playerId){
+        this.setId(playerId);
+    };
 }

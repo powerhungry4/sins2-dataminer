@@ -1,18 +1,20 @@
 package org.dshaver.sins.domain.ingest.unititem;
 
-import lombok.Data;
-import org.dshaver.sins.domain.ingest.unit.ExoticPrice;
-import org.dshaver.sins.domain.ingest.unit.Price;
-import org.dshaver.sins.domain.ingest.unit.Unit;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.dshaver.sins.domain.ingest.exotic.ExoticPrice;
+import org.dshaver.sins.domain.ingest.unit.Price;
+import org.dshaver.sins.domain.ingest.unit.Unit;
+import org.dshaver.sins.service.FileTools;
+
+import lombok.Data;
+
 @Data
-public class UnitItem {
+public class UnitItem implements FileTools.EntityClass{
     String id;
     String name;
     String description;
@@ -58,4 +60,9 @@ public class UnitItem {
 
         return new ArrayList<>();
     }
+
+    @Override
+    public void extraActions(String unitItemId){
+        this.setId(unitItemId);
+    };
 }

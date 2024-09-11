@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.dshaver.sins.domain.Manifest;
 import org.dshaver.sins.domain.ingest.player.Player;
 import org.dshaver.sins.domain.ingest.player.PlayerType;
-import org.dshaver.sins.domain.ingest.research.ResearchSubject;
+import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubject;
 import org.dshaver.sins.domain.ingest.unititem.EmpireModifier;
 import org.dshaver.sins.domain.ingest.unititem.UnitItem;
 import org.dshaver.sins.domain.ingest.unititem.UnitItemType;

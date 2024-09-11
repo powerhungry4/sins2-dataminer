@@ -1,4 +1,4 @@
-package org.dshaver.sins.domain.ingest.unit;
+package org.dshaver.sins.domain.ingest.exotic;
 
 public enum Exotics {
     economic("Andvar"),

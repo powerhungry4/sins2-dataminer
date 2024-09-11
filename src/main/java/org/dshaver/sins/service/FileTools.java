@@ -1,10 +1,20 @@
 package org.dshaver.sins.service;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.MapType;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.io.FileUtils.writeStringToFile;
 import org.apache.commons.lang3.StringUtils;
 import org.dshaver.sins.domain.Manifest;
 import org.dshaver.sins.domain.export.WikiPlanetItem;
@@ -12,24 +22,17 @@ import org.dshaver.sins.domain.export.WikiStructure;
 import org.dshaver.sins.domain.export.WikiUnit;
 import org.dshaver.sins.domain.ingest.ManifestFile;
 import org.dshaver.sins.domain.ingest.player.Player;
-import org.dshaver.sins.domain.ingest.research.ResearchSubject;
+import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubject;
 import org.dshaver.sins.domain.ingest.unit.Unit;
 import org.dshaver.sins.domain.ingest.unit.UnitType;
 import org.dshaver.sins.domain.ingest.unit.WeaponFile;
 import org.dshaver.sins.domain.ingest.unititem.UnitItem;
-import org.dshaver.sins.domain.ingest.unititem.UnitItemType;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static org.apache.commons.io.FileUtils.writeStringToFile;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.MapType;
 
 public class FileTools {
 
@@ -84,7 +87,9 @@ public class FileTools {
         Path path = getPath(steamDir, LOCALIZED_TEXT_FILE_PATH);
         boolean exists = path.toFile().exists();
 
-        System.out.println(STR."Could not find file \{path}!");
+        if (!exists) {
+            System.out.println(STR."Could not find file \{path}!");
+        }
 
         return exists;
     }
@@ -96,6 +101,26 @@ public class FileTools {
             MapType typeReference = objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, String.class);
 
             return objectMapper.readValue(localizedTextInput, typeReference);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public interface EntityClass{
+        public void extraActions(String id);
+    }
+
+    public static <T extends EntityClass> T readEntityFile(String steamDir, String id, Class<T> objectClass) {
+        String extension = objectClass.getSimpleName().replaceAll("(\\p{Ll})(\\p{Lu})","$1_$2").toLowerCase();
+        Path filePath = getEntityPath(steamDir, STR."\{id}.\{extension}");
+        System.out.println(STR."Reading player file \{filePath}");
+
+        try (InputStream is = Files.newInputStream(filePath)) {
+            T instance = objectMapper.readValue(is, objectClass);
+            
+            instance.extraActions(id);
+
+            return instance;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

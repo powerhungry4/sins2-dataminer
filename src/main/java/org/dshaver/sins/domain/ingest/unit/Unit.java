@@ -1,20 +1,22 @@
 package org.dshaver.sins.domain.ingest.unit;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import org.dshaver.sins.domain.ingest.structure.Structure;
-import org.dshaver.sins.domain.ingest.unititem.Faction;
-
 import java.util.ArrayList;
+import static java.util.FormatProcessor.FMT;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static java.util.FormatProcessor.FMT;
+import org.dshaver.sins.domain.ingest.structure.Structure;
+import org.dshaver.sins.domain.ingest.unititem.Faction;
+import org.dshaver.sins.service.FileTools;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import lombok.Data;
 
 @JsonIgnoreProperties
 @Data
-public class Unit {
+public class Unit implements FileTools.EntityClass {
     public static final String ADVENT_ID_PREFIX = "advent";
     public static final String VASARI_ID_PREFIX = "vasari";
     public static final String TEC_ID_PREFIX = "trader";
@@ -107,6 +109,13 @@ public class Unit {
                 | \{weapon.getName()} x\{weapon.getCount()} || %.1f\{weapon.getDps()} || %.0f\{weapon.getPenetration()} || %.0f\{weapon.getRange()}
                 """;
     }
+
+    @Override
+    public void extraActions(String unitId){
+        this.setId(unitId);
+        this.findRace();
+        this.findFaction();
+    };
 
     @Override
     public String toString() {

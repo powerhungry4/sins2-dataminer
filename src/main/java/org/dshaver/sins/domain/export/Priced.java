@@ -1,13 +1,12 @@
 package org.dshaver.sins.domain.export;
 
-import org.dshaver.sins.domain.ingest.unit.ExoticPrice;
-import org.dshaver.sins.domain.ingest.unit.Exotics;
-import org.dshaver.sins.domain.ingest.unit.Price;
-
 import java.util.Collection;
+import static java.util.FormatProcessor.FMT;
 import java.util.Optional;
 
-import static java.util.FormatProcessor.FMT;
+import org.dshaver.sins.domain.ingest.exotic.ExoticPrice;
+import org.dshaver.sins.domain.ingest.exotic.Exotics;
+import org.dshaver.sins.domain.ingest.unit.Price;
 
 /**
  * This interface is used by the wiki. Any changes here will result in large changes on the wiki as well to remap the

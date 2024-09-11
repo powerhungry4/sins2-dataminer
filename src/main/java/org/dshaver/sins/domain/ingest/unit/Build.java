@@ -1,8 +1,10 @@
 package org.dshaver.sins.domain.ingest.unit;
 
-import lombok.Data;
-
 import java.util.List;
+
+import org.dshaver.sins.domain.ingest.exotic.ExoticPrice;
+
+import lombok.Data;
 
 @Data
 public class Build {
