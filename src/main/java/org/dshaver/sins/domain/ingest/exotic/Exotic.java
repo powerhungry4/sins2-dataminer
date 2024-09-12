@@ -10,7 +10,4 @@ public class Exotic implements FileTools.EntityClass{
     String name;
     String description;
     Integer ai_trade_value;
-
-    @Override
-    public void extraActions(String id){};
 }

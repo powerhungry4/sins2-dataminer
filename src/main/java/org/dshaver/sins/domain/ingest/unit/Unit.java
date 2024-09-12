@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dshaver.sins.domain.ingest.structure.Structure;
 import org.dshaver.sins.domain.ingest.unititem.Faction;
 import org.dshaver.sins.service.FileTools;
@@ -115,6 +116,12 @@ public class Unit implements FileTools.EntityClass {
         this.setId(unitId);
         this.findRace();
         this.findFaction();
+
+        String filter = this.getTargetFilterUnitType();
+
+        if (StringUtils.isNotBlank(filter)) {
+            this.setUnitType(UnitType.valueOf(filter));
+        }
     };
 
     @Override

@@ -68,7 +68,7 @@ public class WikiPlanetItem implements Priced {
         if (unitItem.getPrerequisites() != null && !unitItem.getPrerequisites().isEmpty()) {
             this.prerequisites = String.join(",", unitItem.getPrerequisites());
             String romanTier = RomanNumeral.toRoman(unitItem.getPrerequisiteTier() + 1);
-            this.tier = STR."\{StringUtils.capitalize(unitItem.getPrerequisiteDomain())} \{romanTier}";
+            this.tier = STR."\{StringUtils.capitalize(unitItem.getPrerequisiteDomain().toString())} \{romanTier}";
         }
     }
 }

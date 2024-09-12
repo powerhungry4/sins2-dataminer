@@ -21,5 +21,10 @@ public class Player implements FileTools.EntityClass{
     @Override
     public void extraActions(String playerId){
         this.setId(playerId);
-    };
+    }
+    
+    @Override
+    public PlayerType getSubtype() {
+        return PlayerType.getType(this);
+    }
 }

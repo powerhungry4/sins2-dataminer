@@ -107,10 +107,14 @@ public class FileTools {
     }
 
     public interface EntityClass{
-        public void extraActions(String id);
+        default public void extraActions(String id) {}
+        default public <T> T getSubtype() {
+            return null;
+        }
+        abstract public String getId();
     }
 
-    public static <T extends EntityClass> T readEntityFile(String steamDir, String id, Class<T> objectClass) {
+    public static <T extends EntityClass> T readEntityFile(String id, String steamDir, Class<T> objectClass) {
         String extension = objectClass.getSimpleName().replaceAll("(\\p{Ll})(\\p{Lu})","$1_$2").toLowerCase();
         Path filePath = getEntityPath(steamDir, STR."\{id}.\{extension}");
         System.out.println(STR."Reading player file \{filePath}");

@@ -9,7 +9,4 @@ public class ActionDataSource implements FileTools.EntityClass{
     String id;
     String name;
     String description;
-
-    @Override
-    public void extraActions(String id){};
 }

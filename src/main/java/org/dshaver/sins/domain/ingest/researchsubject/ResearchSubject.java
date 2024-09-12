@@ -13,7 +13,7 @@ public class ResearchSubject implements FileTools.EntityClass{
     String id;
     String name;
     String description;
-    String domain;
+    ResearchSubjectDomain domain;
     int tier;
     String field;
     Double researchTime;
@@ -21,5 +21,12 @@ public class ResearchSubject implements FileTools.EntityClass{
     List<ExoticPrice> exoticPrice;
 
     @Override
-    public void extraActions(String id){};
+    public void extraActions(String id){
+        this.setId(id);
+    };
+
+    @Override
+    public ResearchSubjectDomain getSubtype() {
+        return this.domain;
+    }
 }

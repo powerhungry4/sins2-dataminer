@@ -5,11 +5,14 @@ import java.util.Map;
 
 import org.dshaver.sins.domain.ingest.player.Player;
 import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubject;
-import org.dshaver.sins.domain.ingest.unititem.UnitItem;
 import org.dshaver.sins.domain.ingest.unit.Unit;
+import org.dshaver.sins.domain.ingest.unititem.UnitItem;
 
 
 public class GameFileService {
+    private static final String ENTITY_DIRECTORY = "entities/";
+    private static final String ENTITY_MANIFEST_EXTENSION = ".entity_manifest";
+
     private static final String ABILITY_MANIFEST_FILE_PATH = "entities/ability.entity_manifest";
     private static final String ACTION_DATA_SOURCE_MANIFEST_FILE_PATH = "entities/action_data_source.entity_manifest";
     private static final String BUFF_MANIFEST_FILE_PATH = "entities/buff.entity_manifest";
@@ -47,7 +50,7 @@ public class GameFileService {
     }
 
     public <T extends FileTools.EntityClass> T readEntityFile(String id, Class<T> objectClass) {
-        return FileTools.readEntityFile(steamDir, id, objectClass);
+        return FileTools.readEntityFile(id, steamDir, objectClass);
     }
 
     public Player readPlayerFile(String playerId) {
@@ -64,6 +67,11 @@ public class GameFileService {
 
     public Unit readUnitFile(String unitId) {
         return FileTools.readUnitFile(steamDir, unitId);
+    }
+
+    public <T extends FileTools.EntityClass> Path getManifestPath(Class<T> objectClass) {
+        String fileName = objectClass.getSimpleName().replaceAll("(\\p{Ll})(\\p{Lu})","$1_$2").toLowerCase();
+        return Path.of(steamDir).resolve(ENTITY_DIRECTORY + fileName + ENTITY_MANIFEST_EXTENSION);
     }
 
     public Path getAbilityManifestPath() {

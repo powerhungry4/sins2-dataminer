@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.dshaver.sins.domain.ingest.exotic.ExoticPrice;
+import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubjectDomain;
 import org.dshaver.sins.domain.ingest.unit.Price;
 import org.dshaver.sins.domain.ingest.unit.Unit;
 import org.dshaver.sins.service.FileTools;
@@ -30,7 +31,7 @@ public class UnitItem implements FileTools.EntityClass{
     String ability;
     List<String> prerequisites;
     int prerequisiteTier;
-    String prerequisiteDomain;
+    ResearchSubjectDomain prerequisiteDomain;
 
     public void findRace() {
         if (id.contains(Unit.ADVENT_ID_PREFIX)) {
@@ -65,4 +66,9 @@ public class UnitItem implements FileTools.EntityClass{
     public void extraActions(String unitItemId){
         this.setId(unitItemId);
     };
+
+    @Override
+    public UnitItemType getSubtype() {
+        return this.itemType;
+    }
 }
