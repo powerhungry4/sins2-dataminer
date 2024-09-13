@@ -21,8 +21,6 @@ import org.dshaver.sins.domain.export.WikiPlanetItem;
 import org.dshaver.sins.domain.export.WikiStructure;
 import org.dshaver.sins.domain.export.WikiUnit;
 import org.dshaver.sins.domain.ingest.ManifestFile;
-import org.dshaver.sins.domain.ingest.player.Player;
-import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubject;
 import org.dshaver.sins.domain.ingest.unit.Unit;
 import org.dshaver.sins.domain.ingest.unit.UnitType;
 import org.dshaver.sins.domain.ingest.unit.WeaponFile;
@@ -111,6 +109,9 @@ public class FileTools {
         default public <T> T getSubtype() {
             return null;
         }
+        default public EntityClass populate(ManifestService services) {
+            return this;
+        };
         abstract public String getId();
     }
 
@@ -130,41 +131,7 @@ public class FileTools {
         }
     }
 
-    public static Unit readUnitFile(String steamDir, String unitId) {
-        var unitPath = getEntityPath(steamDir, STR."\{unitId}.unit");
-        System.out.println(STR."Reading unit file \{unitPath}");
-
-        try (InputStream is = Files.newInputStream(unitPath)) {
-            Unit unit = objectMapper.readValue(is, Unit.class);
-            unit.setId(unitId);
-            unit.findRace();
-            unit.findFaction();
-
-            if (StringUtils.isNotBlank(unit.getTargetFilterUnitType())) {
-                unit.setUnitType(UnitType.valueOf(unit.getTargetFilterUnitType()));
-            }
-
-            return unit;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static Player readPlayerFile(String steamDir, String playerId) {
-        var playerPath = getEntityPath(steamDir, STR."\{playerId}.player");
-        System.out.println(STR."Reading player file \{playerPath}");
-
-        try (InputStream is = Files.newInputStream(playerPath)) {
-            Player player = objectMapper.readValue(is, Player.class);
-
-            player.setId(playerId);
-
-            return player;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
+    @Deprecated
     public static WeaponFile readWeaponFile(String steamDir, String weaponId) {
         var weaponPath = getEntityPath(steamDir, STR."\{weaponId}.weapon");
         System.out.println(STR."Reading weapon file \{weaponId}");
@@ -173,36 +140,6 @@ public class FileTools {
             WeaponFile weaponFile = FileTools.getObjectMapper().readValue(is, WeaponFile.class);
 
             return weaponFile;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static UnitItem readUnitItemFile(String steamDir, String unitItemId) {
-        var unitItemPath = getEntityPath(steamDir, STR."\{unitItemId}.unit_item");
-        System.out.println(STR."Reading unitItem file \{unitItemPath}");
-
-        try (InputStream is = Files.newInputStream(unitItemPath)) {
-            UnitItem unitItem = objectMapper.readValue(is, UnitItem.class);
-
-            unitItem.setId(unitItemId);
-
-            return unitItem;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static ResearchSubject readResearchSubjectFile(String steamDir, String researchSubjectId) {
-        var path = getEntityPath(steamDir, STR."\{researchSubjectId}.research_subject");
-        System.out.println(STR."Reading research_subject file \{path}");
-
-        try (InputStream is = Files.newInputStream(path)) {
-            ResearchSubject researchSubject = objectMapper.readValue(is, ResearchSubject.class);
-
-            researchSubject.setId(researchSubjectId);
-
-            return researchSubject;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

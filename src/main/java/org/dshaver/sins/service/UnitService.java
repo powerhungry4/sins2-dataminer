@@ -34,7 +34,7 @@ public class UnitService {
 
         // Organize by id
         Map<String, Unit> unitIdMap = unitManifest.getIds().stream()
-                .map(id -> FileTools.readUnitFile(steamDir, id))
+                .map(id -> FileTools.readEntityFile(id, steamDir, Unit.class)) 
                 .filter(unit -> StringUtils.isNotBlank(unit.getTargetFilterUnitType()))
                 .filter(unit -> unit.getUnitType().isShip() || unit.getUnitType().isBuilding())
                 .map(this::populateUnit)

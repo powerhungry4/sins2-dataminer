@@ -12,6 +12,9 @@ import org.dshaver.sins.service.*;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubject;
+import org.dshaver.sins.domain.ingest.researchsubject.ResearchSubjectDomain;
+
 public class Main {
     /**
      * Defaults
@@ -32,7 +35,6 @@ public class Main {
     public static ManifestService manifestService;
     public static UnitService unitService;
     public static PlanetService planetService;
-    public static PlayerService playerService;
 
     public static void main(String[] args) {
         CommandLine cmd = readArgs(args);
@@ -57,7 +59,6 @@ public class Main {
         manifestService = new ManifestService(gameFileService);
         unitService = new UnitService(gameFileService, steamDir);
         planetService = new PlanetService(manifestService);
-        playerService = new PlayerService(gameFileService, manifestService);
     }
 
     private static CommandLine readArgs(String[] args) {
@@ -88,8 +89,11 @@ public class Main {
     }
 
     public static void loadFilesAndExport() {
-        // Read player files as a starting point
-        Manifest<PlayerType, Player> playerManifest = playerService.getPlayerManifest();
+        // Read research files as a starting point
+        Manifest<ResearchSubjectDomain, ResearchSubject> researchManifest = manifestService.getManifest(ResearchSubject.class);
+
+        // Read player files
+        Manifest<PlayerType, Player> playerManifest = manifestService.getManifest(Player.class);
 
         // Write units file
         Manifest<UnitType, Unit> units = unitService.loadUnitManifest();

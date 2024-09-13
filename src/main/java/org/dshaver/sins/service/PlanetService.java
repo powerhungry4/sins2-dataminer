@@ -15,7 +15,7 @@ public class PlanetService {
     }
 
     public Collection<UnitItem> loadPlanetItems() {
-        Manifest<UnitItemType, UnitItem> unitItemManifest = manifestService.loadUnitItemManifest();
+        Manifest<UnitItemType, UnitItem> unitItemManifest = manifestService.getManifest(UnitItem.class);
 
         Collection<UnitItem> planetComponents = unitItemManifest.getByType(UnitItemType.planet_component);
 
